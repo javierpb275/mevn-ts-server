@@ -11,7 +11,15 @@ router.get("/tasks", async (req: Request, res: Response): Promise<Response> => {
 router.get(
   "/tasks/:id",
   async (req: Request, res: Response): Promise<Response> => {
-    return res.send("get /tasks/:id");
+    try {
+      const task: ITask | null = await Task.findById(req.params.id);
+      if (!task) {
+        return res.status(404).json({ message: "task not found" });
+      }
+      return res.send(task);
+    } catch (error) {
+      return res.status(500).send(error);
+    }
   }
 );
 
@@ -28,14 +36,27 @@ router.post(
 router.put(
   "/tasks/:id",
   async (req: Request, res: Response): Promise<Response> => {
-    return res.send("put /tasks/:id");
+    const updatedTask: ITask | null = await Task.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+    return res.json(updatedTask);
   }
 );
 
 router.delete(
   "/tasks/:id",
   async (req: Request, res: Response): Promise<Response> => {
-    return res.send("delete /tasks/:id");
+    try {
+      const task: ITask | null = await Task.findByIdAndDelete(req.params.id);
+      if (!task) {
+        return res.status(404).json({ message: "task not found" });
+      }
+      return res.json(task);
+    } catch (error) {
+      return res.status(500).send(error);
+    }
   }
 );
 

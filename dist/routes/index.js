@@ -20,7 +20,16 @@ router.get("/tasks", (req, res) => __awaiter(void 0, void 0, void 0, function* (
     return res.json(tasks);
 }));
 router.get("/tasks/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    return res.send("get /tasks/:id");
+    try {
+        const task = yield Task_1.default.findById(req.params.id);
+        if (!task) {
+            return res.status(404).json({ message: "task not found" });
+        }
+        return res.send(task);
+    }
+    catch (error) {
+        return res.status(500).send(error);
+    }
 }));
 router.post("/tasks", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { title, description } = req.body;
@@ -29,9 +38,19 @@ router.post("/tasks", (req, res) => __awaiter(void 0, void 0, void 0, function* 
     return res.status(201).json(task);
 }));
 router.put("/tasks/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    return res.send("put /tasks/:id");
+    const updatedTask = yield Task_1.default.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    return res.json(updatedTask);
 }));
 router.delete("/tasks/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    return res.send("delete /tasks/:id");
+    try {
+        const task = yield Task_1.default.findByIdAndDelete(req.params.id);
+        if (!task) {
+            return res.status(404).json({ message: "task not found" });
+        }
+        return res.json(task);
+    }
+    catch (error) {
+        return res.status(500).send(error);
+    }
 }));
 exports.default = router;
