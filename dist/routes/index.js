@@ -17,13 +17,16 @@ const Task_1 = __importDefault(require("../models/Task"));
 const router = (0, express_1.Router)();
 router.get("/tasks", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const tasks = yield Task_1.default.find();
-    return res.send(tasks);
+    return res.json(tasks);
 }));
 router.get("/tasks/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     return res.send("get /tasks/:id");
 }));
 router.post("/tasks", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    return res.send("post /tasks");
+    const { title, description } = req.body;
+    const task = new Task_1.default({ title, description });
+    yield task.save();
+    return res.status(201).json(task);
 }));
 router.put("/tasks/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     return res.send("put /tasks/:id");

@@ -6,21 +6,26 @@ export interface ITask extends Document {
   done: boolean;
 }
 
-const taskSchema = new Schema({
-  title: {
-    type: String,
-    required: true,
-    trim: true,
+const taskSchema = new Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    description: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    done: {
+      type: Boolean,
+      default: false,
+    },
   },
-  description: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  done: {
-    type: Boolean,
-    default: false,
-  },
-});
+  {
+    versionKey: false,
+  }
+);
 
 export default model<ITask>("Task", taskSchema);

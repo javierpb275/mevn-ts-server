@@ -16,5 +16,7 @@ const taskSchema = new mongoose_1.Schema({
         type: Boolean,
         default: false,
     },
+}, {
+    versionKey: false,
 });
 exports.default = (0, mongoose_1.model)("Task", taskSchema);

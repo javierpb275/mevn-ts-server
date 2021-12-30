@@ -5,7 +5,7 @@ const router: Router = Router();
 
 router.get("/tasks", async (req: Request, res: Response): Promise<Response> => {
   const tasks: ITask[] = await Task.find();
-  return res.send(tasks);
+  return res.json(tasks);
 });
 
 router.get(
@@ -18,7 +18,10 @@ router.get(
 router.post(
   "/tasks",
   async (req: Request, res: Response): Promise<Response> => {
-    return res.send("post /tasks");
+    const { title, description } = req.body;
+    const task: ITask = new Task({ title, description });
+    await task.save();
+    return res.status(201).json(task);
   }
 );
 
